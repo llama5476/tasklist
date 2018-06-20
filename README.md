@@ -1,3 +1,3 @@
 # tasklist
 App for a to-do list
-From Brad Traversy of Traversy Media, on Udemy
+This is originally a project on Udemy, From Brad Traversy of Traversy Media

@@ -1,156 +1,159 @@
-//Define UI Var
-const form = document.querySelector('#task-form');
-const taskList = document.querySelector('.collection');
-const clearBtn = document.querySelector('.clear-tasks');
-const filter = document.querySelector('#filter');
-const taskInput = document.querySelector('#task');
+//define UI variables
+const form = document.getElementById('item-form');
+const itemList = document.querySelector('.collection');
+const clearBtn = document.querySelector('.clear-items');
+const filter = document.getElementById('filter');
+const itemInput = document.getElementById('item');
 
-//Function to load eventListeners
+//load all event listeners
 loadEventListeners();
 
+//function - load all event listeners
 function loadEventListeners() {
-    //DOM load event
-    document.addEventListener('DOMContentLoaded', getTasks);
-    //add task event
-    form.addEventListener('submit', addTask);
-    //Remove task event
-    taskList.addEventListener('click', removeTask);
-    //Clear Task Event
-    clearBtn.addEventListener('click', clearTasks);
-    //filter tasks event
-    filter.addEventListener('keyup', filterTasks);
+   //DOM Load event
+   document.addEventListener('DOMContentLoaded', getItems);
+   //add item event
+   form.addEventListener('submit', addItem);
+   //remove item event
+   itemList.addEventListener('click', removeItem);
+   //clear item event
+   clearBtn.addEventListener('click', clearItems);
+   //filter items event
+   filter.addEventListener('keyup', filterItems);
 }
 
-//get tasks from Local Storage
-function getTasks() {
-    let tasks;
-    if(localStorage.getItem('tasks') === null){
-        tasks = [];
-    } else {
-        tasks = JSON.parse(localStorage.getItem('tasks'));
-    }
+//get items from Local Storge
+function getItems(){
+   let items;
+   if(localStorage.getItem('items') === null){
+      items = [];
+   } else {
+      items = JSON.parse(localStorage.getItem('items'));
+   }
 
-tasks.forEach(function(task) {
-    //create li element
-    const li = document.createElement('li');
-    //add class
-    li.className = 'collection-item';
-    //text node and append to the li
-    li.appendChild(document.createTextNode(task));
-    //create new link element
-    const link = document.createElement('a');
-    //add class
-    link.className = 'delete-item secondary-content';
-    //add icon html
-    link.innerHTML = '<i class="fa fa-remove"></i>';
-    //append the link to li
-    li.appendChild(link);
-    
-    //append li to ul
-    taskList.appendChild(li);
-    })
-}
-//add task
-function addTask(e) {
-    if(taskInput.value === '') {
-        alert('Add a task');
-    }
-
-    //create li element
-    const li = document.createElement('li');
-    //add class
-    li.className = 'collection-item';
-    //text node and append to the li
-    li.appendChild(document.createTextNode(taskInput.value));
-    //create new link element
-    const link = document.createElement('a');
-    //add class
-    link.className = 'delete-item secondary-content';
-    //add icon html
-    link.innerHTML = '<i class="fa fa-remove"></i>';
-    //append the link to li
-    li.appendChild(link);
-    
-    //append li to ul
-    taskList.appendChild(li);
-
-    //Store in local storage
-    storeTaskInLocalStorage(taskInput.value);
-    
-    //clear input
-    taskInput.value = '';
-    e.preventDefault();
+//loop
+items.forEach(function(item){
+      //create li element
+      const li = document.createElement('li');
+      //add class
+      li.className = 'collection-item';
+      //create text node and append to li
+      li.appendChild(document.createTextNode(item));
+      //create new link element
+      const link = document.createElement('a');
+      //add class
+      link.className = 'delete-item secondary-content';
+      //add icon html
+      link.innerHTML = '<i class ="fa fa-remove"></i>';
+      //append the link to li
+      li.appendChild(link);
+   
+      //append the li to ul
+      itemList.appendChild(li);
+   });
 }
 
-//Store task
-function storeTaskInLocalStorage(task) {
-    let tasks;
-    if(localStorage.getItem('tasks') === null){
-        tasks = [];
-    } else {
-        tasks = JSON.parse(localStorage.getItem('tasks'));
-    }
+//add item
+function addItem(e) {
+   if(itemInput.value === '') {
+      alert('Add an Item');
+   }
 
-    tasks.push(task);
+   //create li element
+   const li = document.createElement('li');
+   //add class
+   li.className = 'collection-item';
+   //create text node and append to li
+   li.appendChild(document.createTextNode(itemInput.value));
+   //create new link element
+   const link = document.createElement('a');
+   //add class
+   link.className = 'delete-item secondary-content';
+   //add icon html
+   link.innerHTML = '<i class ="fa fa-remove"></i>';
+   //append the link to li
+   li.appendChild(link);
 
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+   //append the li to ul
+   itemList.appendChild(li);
+
+   //items in local storage
+   storeItemInLocalStorage(itemInput.value);
+
+   //clear input
+   itemInput.value = '';
+
+   e.preventDefault();
+}
+//store the item
+function storeItemInLocalStorage(item) {
+   let items;
+   if(localStorage.getItem('items') === null){
+      items = [];
+   } else {
+      items = JSON.parse(localStorage.getItem('items'));
+   }
+
+   items.push(item);
+
+   localStorage.setItem('items', JSON.stringify(items));
 }
 
-//Remove Task
-function removeTask (e) {
-    if(e.target.parentElement.classList.contains('delete-item')) {
-        if(confirm('Are you sure?')) {
-        e.target.parentElement.parentElement.remove();
+//remove item
+function removeItem(e){
+   if(e.target.parentElement.classList.contains('delete-item')) {
+      if(confirm('Are You Sure?')) {
+   e.target.parentElement.parentElement.remove();
 
-        //remove from local storage
-        removeTaskFromLocalStorage(e.target.parentElement.parentElement);
-        }
-    }
+   //remove from localstorage
+   removeItemFromLocalStorage(e.target.parentElement.parentElement);
+      }
+   }
 }
 
-//function to remove from local storage
-function removeTaskFromLocalStorage(taskItem) {
-    let tasks;
-    if(localStorage.getItem('tasks') === null){
-        tasks = [];
-    } else {
-        tasks = JSON.parse(localStorage.getItem('tasks'));
-    }
+//function - remove from LS loop
+function removeItemFromLocalStorage(itemItem) {
+   let items;
+   if(localStorage.getItem('items') === null){
+      items = [];
+   } else {
+      items=JSON.parse(localStorage.getItem('items'));
+   }
 
-    tasks.forEach(function(task, index){
-        if(taskItem.textContent === task){
-            tasks.splice(index, 1);
-        }
-    });
+   items.forEach(function(item){
+      if(itemItem.textContent === item){
+         items.splice(index, 1);
+      }
+   });
 
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+   localStorage.setItem('items', JSON.stringify(items));
 }
 
-//Clear Tasks
-function clearTasks() {
-    while(taskList.firstChild) {
-        taskList.removeChild(taskList.firstChild);
-    }
-
-    //clear tasks from Local Storage
-    clearTasksFromLocalStorage();
+//clear items
+function clearItems(){
+   while(itemList.firstChild){
+      itemList.removeChild(itemList.firstChild);
+   }
+   //clear items from local storage
+   clearItemsFromLocalStorage();
 }
 
-//function to clear tasks from local storage
-function clearTasksFromLocalStorage(){
-    localStorage.clear();
+//function clear items from LS
+function clearItemsFromLocalStorage(){
+   localStorage.clear();
 }
 
-// filter tasks
-function filterTasks(e) {
-    const text = e.target.value.toLowerCase();
-    
-    document.querySelectorAll('.collection-item').forEach(function(task){
-        const item = task.firstChild.textContent;
-        if(item.toLowerCase().indexOf(text) != -1){
-            task.style.display = 'block';
-        } else {
-            task.style.display = 'none';
-        }
-    });
+//filter items
+function filterItems(e) {
+   const text = e.target.value.toLowerCase();
+
+   document.querySelectorAll('.collection-item').forEach(function(item){
+      const piece = item.firstChild.textContent;
+      if(piece.toLowerCase().indexOf(text) != -1){
+         item.style.display = 'block';
+      } else {
+         item.style.display = 'none';
+      }
+   });
+
 }
